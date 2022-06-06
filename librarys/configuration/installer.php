@@ -7,6 +7,14 @@ use PDO;
 if(count($_POST) == 4) {
 
     $ds = DIRECTORY_SEPARATOR;
+    
+    // Создание файлов и папок
+
+    $cache_dir = $_SERVER['DOCUMENT_ROOT'] . "/cache";
+    mkdir($cache_dir, 0777, True);
+
+    $logs_dir = $_SERVER['DOCUMENT_ROOT'] . "/logs";
+    mkdir($logs_dir, 0777, True);
 
     // Создание дескриптора подключения
 
