@@ -6,19 +6,18 @@
     CREATE USER admin@localhost IDENTIFIED BY 'password';
     GRANT CREATE, DROP, SELECT, UPDATE, INSERT  ON *.* TO admin@localhost;
 
-    БД создавать не нужно, так как она создастся установщиком.
+     БД создавать не нужно, так как она создастся установщиком.
 
 2) Настроить сервер Apache
 
     Предоставить возможность записи в директорию с сайтом
-    Переименовать файл some.htaccess в .htaccess
 
  2) Запустить установщик installation.php
 
     Хост: localhost
     БД: db_name (Придумать имя БД. Минимум 4 символа. Можно использовать уже созданную.)
-    Пароль: password
-    Логин: admin
+    Пароль: ''
+    Логин: ''
 
 3) Зайти в кабинет администратора
 
