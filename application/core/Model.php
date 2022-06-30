@@ -2,8 +2,8 @@
 
 namespace application\core;
 
-use librarys\Cache;
-use librarys\Log;
+use libraries\Cache;
+use libraries\Log;
 use PDO;
 
 class Model {
@@ -28,7 +28,7 @@ class Model {
 			echo "Нет соединения с базой данных";
 		}
 
-        $this->getLibrarys();   // Загрузка библиотек
+        $this->getlibraries();   // Загрузка библиотек
 
         // Запуск асинхронных методов из JS
 
@@ -40,12 +40,12 @@ class Model {
 
     // Подключение библиотек
 
-    public function getLibrarys() {
+    public function getlibraries() {
 
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/librarys/Log.php';       // Логирование
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/libraries/Log.php';       // Логирование
         $this->log = new Log;
 
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/librarys/Cache.php';     // Кэширование
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/libraries/Cache.php';     // Кэширование
         $this->cache = new Cache;
     }
 

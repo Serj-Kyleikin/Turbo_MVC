@@ -4,7 +4,7 @@ namespace application\core;
 
 use application\core\View;
 use application\core\Model;
-use librarys\Log;
+use libraries\Log;
 
 class Controller {
 
@@ -14,7 +14,7 @@ class Controller {
 
     public function __construct($route, $plugin) {
 
-        $this->getLibrarys();   // Загрузка библиотек
+        $this->getlibraries();   // Загрузка библиотек
 
         $this->view = new View;
 
@@ -81,9 +81,9 @@ class Controller {
 
     // Подключение библиотек (Библиотека, в отличие от плагина - часть ядра)
 
-    public function getLibrarys() {
+    public function getlibraries() {
 
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/librarys/Log.php';       // Логирование
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/libraries/Log.php';       // Логирование
         $this->log = new Log;
     }
 }
