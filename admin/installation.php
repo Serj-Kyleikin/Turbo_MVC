@@ -33,7 +33,7 @@
             }
         }
 
-        let sentAjax = await fetch('/librarys/configuration/installer.php', {
+        let sentAjax = await fetch('/libraries/configuration/installer.php', {
             method: 'POST',
             body: formData
         });
