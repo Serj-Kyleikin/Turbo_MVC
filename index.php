@@ -9,6 +9,7 @@ session_start();
 ini_set('display_errors', 0);       // Отображение ошибок
 error_reporting(E_ALL);
 
+define('A_MODE', 0);                // Режим администратора
 define('C_MODE', 0);                // Режим проверки
 define('D_MODE', 0);                // Режим диагностики
 define('P_MODE', 1);                // Использование плагинов
