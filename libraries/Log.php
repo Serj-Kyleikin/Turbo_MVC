@@ -24,8 +24,10 @@ class Log {
 
     public function write($data, $code) {
 
+        $path = (gettype($code) == 'integer') ? $this->code_files[$code] : $code;
+
         $ds = DIRECTORY_SEPARATOR;
-        $file = $_SERVER['DOCUMENT_ROOT'] . $ds . 'logs' . $ds . $this->code_files[$code];
+        $file = $_SERVER['DOCUMENT_ROOT'] . $ds . 'logs' . $ds . $path;
         $date = '*************' . date('[Y-m-d H:i:s] ') . '*************';
 
         file_put_contents($file, PHP_EOL . $date, FILE_APPEND | LOCK_EX);
