@@ -34,8 +34,6 @@ async function getData(method) {
 
     let data = await sentAjax.text();
 
-    console.log(data)
-
     // Проверка данных
 
     if(data) {
@@ -74,7 +72,7 @@ async function getData(method) {
             password.value = '';
 
         } else {
-            //document.location.href = 'cabinet';
+            document.location.href = 'cabinet';
         }
     }
 } 
