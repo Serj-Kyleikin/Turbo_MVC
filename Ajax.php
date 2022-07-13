@@ -35,25 +35,25 @@ if(isset($_POST['ajaxSettings']) and isset($_POST['ajaxMethod'])) {
     if($settings[0] == 'plugins') {
 
         $file = $_SERVER['DOCUMENT_ROOT'] . '/plugins/' . $settings[1] . '/models/AjaxModel.php';
-
-        try {
-
-            if(!file_exists($file)) throw new \Exception($errors[0] . $file);
-            else require_once $file;
-
-            $path = '\plugins\\' . $settings[1] . '\models\AjaxModel';
-
-            if(!class_exists($path)) throw new \Exception($errors[1] . $file);
-
-        } catch(\Exception $e) {
-            $log->logErrors($e, 0);
-        }
+        $path = '\plugins\\' . $settings[1] . '\models\AjaxModel';
 
     } else {
-        // Загрузка ajax-модели пользовательской части сайта 
+
+        $file = $_SERVER['DOCUMENT_ROOT'] . '/application/models/ajax/' . $settings[1] . 'Model.php';
+        $path = '\application\models\ajax\\' . $settings[1] . 'Model';
     }
 
-    new $path;
+    try {
+
+        if(!file_exists($file)) throw new \Exception($errors[0] . $file);
+        else require_once $file;
+
+        if(!class_exists($path)) throw new \Exception($errors[1] . $file);
+        else new $path;
+
+    } catch(\Exception $e) {
+        $log->logErrors($e, 0);
+    }
 
 } else {
     header('location: /');
