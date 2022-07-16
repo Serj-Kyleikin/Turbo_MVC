@@ -11,33 +11,24 @@ class PluginModel extends Model {
 
     public function getCabinet($info) {
 
-        $data = $this->cache->read('plugin_cabinet.tmp');
+        // Настройка страниц
 
-        if(empty($data)) {
+        try {
 
-            $data['settings'] = $this->getInfo($info);
+            $getPages = $this->connection->prepare('SELECT * FROM settings_pages');
+            $getPages->execute();
 
-            // Настройка страниц
+            $data['pages'] = $getPages->fetchAll(PDO::FETCH_ASSOC);
 
-            try {
+            // Вакансии
 
-                $getPages = $this->connection->prepare('SELECT * FROM settings_pages');
-                $getPages->execute();
+            $getVacancys = $this->connection->prepare('SELECT * FROM site_jobs');
+            $getVacancys->execute();
 
-                $data['content']['pages'] = $getPages->fetchAll(PDO::FETCH_ASSOC);
+            $data['vacancys'] = $getVacancys->fetchAll(PDO::FETCH_ASSOC);
 
-                // Вакансии
-
-                $getVacancys = $this->connection->prepare('SELECT * FROM site_jobs');
-                $getVacancys->execute();
-
-                $data['content']['vacancys'] = $getVacancys->fetchAll(PDO::FETCH_ASSOC);
-
-            } catch(\PDOException $e) {
-                logError($e, 1);
-            }
-
-            $this->cache->write('plugin_cabinet.tmp', $data);
+        } catch(\PDOException $e) {
+            logError($e, 1);
         }
 
         return $data;

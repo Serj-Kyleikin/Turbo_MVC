@@ -1,6 +1,6 @@
 <?php
 
-$vacancys = $page['content']['vacancys'];
+$vacancys = $page['content'];
 $countVacancys = count($vacancys);
 
 ?>

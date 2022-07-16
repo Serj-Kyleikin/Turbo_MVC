@@ -18,7 +18,7 @@ class MainModel extends Model {
             $getVacancys = $this->connection->prepare('SELECT * FROM site_jobs');
             $getVacancys->execute();
 
-            return $data['vacancys'] = $getVacancys->fetchAll(PDO::FETCH_ASSOC);
+            return $data = $getVacancys->fetchAll(PDO::FETCH_ASSOC);
 
         } catch(\PDOException $e) {
             logError($e, 1);
