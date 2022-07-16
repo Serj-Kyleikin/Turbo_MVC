@@ -24,16 +24,26 @@ return [
             annotation varchar(100) NULL, 
             scripts varchar(100) NULL
         );",
-        "CREATE TABLE IF NOT EXISTS plugin_users (
-            id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
-            admin_login VARCHAR(100), 
-            admin_password VARCHAR(100), 
-            admin_password_hash VARCHAR(100), 
-            personal_id integer(100), 
+        "CREATE TABLE IF NOT EXISTS plugin_users_registered (
+            id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+            login VARCHAR(100), 
+            password VARCHAR(100), 
+            password_hash VARCHAR(100)
+        ) ENGINE = InnoDB;",
+        "CREATE TABLE IF NOT EXISTS plugin_users_secure (
+            user_id integer(100) UNSIGNED NOT NULL, 
             secret varchar(100), 
-            attempts integer(100) NULL, 
-            date timestamp NULL
-        );",
+            attempts smallint(1) NULL, 
+            date timestamp NULL, 
+            KEY user_id (user_id), 
+            FOREIGN KEY (user_id) REFERENCES plugin_users_registered (id) ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE = InnoDB;",
+        "CREATE TABLE IF NOT EXISTS plugin_users_personal (
+            user_id integer(100) UNSIGNED NOT NULL, 
+            name varchar(100), 
+            mail varchar(100), 
+            FOREIGN KEY (user_id) REFERENCES plugin_users_registered (id) ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE = InnoDB;",
         "CREATE TABLE IF NOT EXISTS plugin_formBuilder_forms (
             id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
             name VARCHAR(100), 

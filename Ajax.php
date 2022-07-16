@@ -4,17 +4,17 @@ use libraries\Log;
 
 // Настройки администратора (0 - публичное размещение, 1 - отладка)
 
-ini_set('display_errors', 0);       // Отображение ошибок
+ini_set('display_errors', 1);       // Отображение ошибок
 error_reporting(E_ALL);
 
-define('A_MODE', 0);                // Режим администратора
-define('D_MODE', 0);                // Режим диагностики
+define('A_MODE', 1);                // Режим администратора
+define('D_MODE', 1);                // Режим диагностики
 
 if(A_MODE) require_once $_SERVER['DOCUMENT_ROOT'] . '/libraries/Admin.php';
 
 // Загрузка модели
 
-if(isset($_POST['ajaxSettings']) and isset($_POST['ajaxMethod'])) {
+if(isset($_POST['ajaxSettings'])) {
 
     // Логирование ошибок
 
@@ -49,7 +49,7 @@ if(isset($_POST['ajaxSettings']) and isset($_POST['ajaxMethod'])) {
         else require_once $file;
 
         if(!class_exists($path)) throw new \Exception($errors[1] . $file);
-        else new $path;
+        else new $path($settings[2]);
 
     } catch(\Exception $e) {
         $log->logErrors($e, 0);

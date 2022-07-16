@@ -24,8 +24,7 @@ async function updateInfo(name) {
         }
     }
 
-    formData.append('ajaxSettings', 'plugins:cabinet:');
-    formData.append('ajaxMethod', 'save' + name);
+    formData.append('ajaxSettings', 'plugins:cabinet:save'+name);
 
     // Запрос на сервер
 
@@ -43,8 +42,7 @@ async function getButton(name) {
     
     let formData = new FormData();
     
-    formData.append('ajaxSettings', 'plugins:cabinet:');
-    formData.append('ajaxMethod', 'getButton');
+    formData.append('ajaxSettings', 'plugins:cabinet:getButton');
 
     formData.append('name', name);
 
@@ -135,8 +133,7 @@ async function formInfo(name) {
         if(items[i].getAttribute('data-' + name.toLowerCase()) != 'new_' + name.toLowerCase()) formData.append('id', items[i].getAttribute('data-' + name.toLowerCase()));
         else formData.append('id', 'add');
 
-        formData.append('ajaxSettings', 'plugins:cabinet:');
-        formData.append('ajaxMethod', 'save' + name);
+        formData.append('ajaxSettings', 'plugins:cabinet:save'+name);
 
         await fetch('/Ajax.php', {
             method: 'POST',
@@ -159,10 +156,8 @@ async function deleteItem(item, name) {
 
         formData.append('id', item.parentNode.getAttribute('data-' + name));
 
-        formData.append('ajaxSettings', 'plugins:cabinet:');
-        formData.append('ajaxMethod', 'delete' + name.toUpperCase());
+        formData.append('ajaxSettings', 'plugins:cabinet:delete'+name.toUpperCase());
 
-        let sentAjax = 
         await fetch('/Ajax.php', {
             method: 'POST',
             body: formData

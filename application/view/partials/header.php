@@ -13,7 +13,7 @@ $cabinet = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYEAQAAAAa7ikwAA
         <li><a href="/">
             <img width="24" height="24" alt="" src="<?=$main;?>"> Главная
         </a></li>
-        <? if(isset($_COOKIE['admin'])): ?>
+        <? if(isset($_COOKIE['user'])): ?>
             <li><a href="cabinet">
                 <img width="24" height="24" alt="" src="<?=$cabinet;?>">
                 <span>Кабинет</span>

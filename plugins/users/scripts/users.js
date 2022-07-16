@@ -1,4 +1,4 @@
-// Авторизация
+// Авторизация и регистрация
 
 async function getData(method) {
 
@@ -11,7 +11,7 @@ async function getData(method) {
         info = error.name;
     }
 
-    // Формирование POST
+    // Формирование данных
 
     let formData = new FormData();
 
@@ -19,11 +19,13 @@ async function getData(method) {
 
     let form = document.forms[0];
 
-    formData.append('login', form.elements.login.value);
-    formData.append('password', form.elements.password.value);
+    for(let i = 0; i < form.length; i++) {
+        if(form.elements[i].getAttribute('type') != 'submit') {
+            formData.append(form.elements[i].getAttribute('name'), form.elements[i].value);
+        }
+    }
 
-    formData.append('ajaxSettings', 'plugins:users:');
-    formData.append('ajaxMethod', method);
+    formData.append('ajaxSettings', 'plugins:users:'+method);
 
     // Запрос на сервер
 
@@ -33,46 +35,48 @@ async function getData(method) {
     });
 
     let data = await sentAjax.text();
+    formData = null;
 
     // Проверка данных
 
-    if(data) {
+    if(data == 'verify') document.location.href = '';
+    else showError(data);
+}
 
-        formData = null;
+// Показ сообщения об ошибке
 
-        if(data == 'wrong_Login') {
+function showError(data) {
 
-            if(document.querySelector('.wrong')) document.querySelector('.wrong').remove();
-
-            let DIV = document.createElement('div');
-            document.getElementById('login').appendChild(DIV);
-            DIV.classList.add('wrong');
-            DIV.textContent = 'Неверный логин!';
-
-            password.value = '';
-
-        } else if(/^password_/.test(data)) {
-
-            if(document.querySelector('.wrong')) document.querySelector('.wrong').remove();
-
-            let DIV = document.createElement('div');
-            document.getElementById('password').appendChild(DIV);
-            DIV.classList.add('wrong');
-
-            let message = 'Неверный пароль! Остал';
-
-            if(data.split('_')[1] != 'blocked') {
-                message += (data.split('_')[1] == '2') ? 'ось 2 попытки' : 'ась 1 попытка';
-            } else {
-                message = 'Следующая попытка через 1 час!'
-            }
-
-            DIV.textContent = message;
-
-            password.value = '';
-
-        } else {
-            document.location.href = 'cabinet';
-        }
+    let errors = {
+        wrong_a_login: 'Неверный логин!',
+        wrong_r_login: 'Логин занят!',
+        wrong_r_mail: 'Почта уже используется!'
     }
-} 
+
+    let error = document.querySelector('.wrong');
+    if(error) error.remove();
+
+    let status = data.split('_');
+    let message, field;
+
+    if(status[0] == 'password') {
+
+        field = document.getElementById(status[0]);
+
+        message = 'Неверный пароль! Остал';
+
+        if(status[1] != 'blocked') message += (status[1] == '2') ? 'ось 2 попытки' : 'ась 1 попытка';
+        else message = 'Следующая попытка через 1 час!'
+
+    } else {
+        field = document.getElementById(status[2]);
+        message = errors[data];
+    }
+
+    let DIV = document.createElement('div');
+    field.appendChild(DIV);
+    DIV.classList.add('wrong');
+
+    DIV.textContent = message;
+    field.children[1].value = '';
+}

@@ -16,7 +16,7 @@ class Model {
         '0' => 'Отсутствует файл подключения к БД: '
     ];
 
-	public function __construct() {
+	public function __construct($method = []) {
 
         $connection = $this->getConfiguration();                   // Получение данных подключения к БД
 
@@ -35,11 +35,9 @@ class Model {
 
         // Запуск асинхронных методов из JS
 
-        if(isset($_POST['ajaxMethod']) and $_POST['ajaxMethod'] != '') {
+        if($method != []) {
 
             $this->loadLibraries();                     // Подключение библиотек
-
-			$method = $_POST['ajaxMethod'];
 			$this->$method();
 
 		} else $this->getLibraries();                   // Загрузка библиотек
@@ -81,6 +79,28 @@ class Model {
         $this->getLibraries();
     }
 
+    // Получение данных модели (Фасад)
+
+    public function getData($info) {
+
+        $type = (isset($info['plugin'])) ? 'plugin_' : 'page_';
+        $cache = $type . $info['path'] . '.tmp';
+
+        $data = $this->cache->read($cache);
+
+        if(empty($data)) {
+
+            $method = $info['method'];
+
+            $data['content'] = $this->$method($info);
+            $data['settings'] = $this->getInfo($info);
+
+            $this->cache->write($cache, $data);
+        }
+
+        return $data;
+    }
+
     // Получение данных страницы (Общий метод всех моделей)
 
     public function getInfo($info, $advance = []) {
@@ -118,12 +138,14 @@ class Model {
 
     public function checkUser() {
 
-        $prepare['personal_id'] = explode('_', $_COOKIE['admin'])[0];
-        $prepare['secret'] = explode('_', $_COOKIE['admin'])[1];
+        $secret = substr(explode('_', $_COOKIE['user'])[0], 0, -2);
+        $key = (int)$secret / 3;
+        $prepare['user_id'] =  substr($key, 2, -2);
+        $prepare['secret'] = explode('_', $_COOKIE['user'])[1];
 
         try {
 
-            $check = $this->connection->prepare("SELECT secret FROM plugin_users WHERE personal_id=:personal_id and secret=:secret");
+            $check = $this->connection->prepare("SELECT secret FROM plugin_users_secure WHERE user_id=:user_id and secret=:secret");
             $check->execute($prepare);
 
             $row = $check->fetch(PDO::FETCH_ASSOC);
@@ -133,6 +155,6 @@ class Model {
         }
 
         if(isset($row['secret'])) return 'checked';
-        else setcookie('admin', '', time()-86400, '/');
+        else setcookie('user', '', time()-86400, '/');
     }
 }

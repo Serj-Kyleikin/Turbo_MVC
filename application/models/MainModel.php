@@ -11,28 +11,17 @@ class MainModel extends Model {
 
     public function getMain($info) {
 
-        $data = $this->cache->read('page_main.tmp');
-        
-        if(empty($data)) {
+        // Вакансии
 
-            $data['settings'] = $this->getInfo($info);
+        try {
 
-            // Вакансии
+            $getVacancys = $this->connection->prepare('SELECT * FROM site_jobs');
+            $getVacancys->execute();
 
-            try {
+            return $data['vacancys'] = $getVacancys->fetchAll(PDO::FETCH_ASSOC);
 
-                $getVacancys = $this->connection->prepare('SELECT * FROM site_jobs');
-                $getVacancys->execute();
-
-                $data['content']['vacancys'] = $getVacancys->fetchAll(PDO::FETCH_ASSOC);
-
-                $this->cache->write('page_main.tmp', $data);
-
-            } catch(\PDOException $e) {
-                logError($e, 1);
-            }
+        } catch(\PDOException $e) {
+            logError($e, 1);
         }
-
-        return $data;
     }
 }

@@ -7,11 +7,11 @@ use application\core\Model;
 
 class PluginController extends Controller {
 
-    public function start($info, $method) {
+    public function start($info) {
 
         // Маршрутизация
 
-        if(isset($_COOKIE['admin'])) {
+        if(isset($_COOKIE['user'])) {
 
             if($this->model->checkUser() == 'checked') {
                 if($info['path'] == 'authorization') redirect('cabinet');
@@ -25,6 +25,6 @@ class PluginController extends Controller {
 
         // Получение данных модели
 
-        return $this->model->$method($info);
+        return $this->model->getData($info);
     }
 }

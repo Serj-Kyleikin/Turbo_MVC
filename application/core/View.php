@@ -22,9 +22,11 @@ class View {
         if(isset($info['plugin'])) {
             $contentPath = 'plugins/' . $info['plugin'] . '/view/';
             $stylePath =  'plugins/' . $info['plugin'] . '/styles/';
+            $scriptPath = 'plugins/' . $info['plugin'] . '/scripts/';
         } else {
             $contentPath = 'application/view/pages/';
             $stylePath = 'public/css/pages/';
+            $scriptPath = 'public/js/';
         }
 
         $page['partials']['content'] = $contentPath . $info['path'] . '.php';
@@ -35,7 +37,7 @@ class View {
         if($data['settings']['scripts'] != '') {
             $scripts = explode(',', $data['settings']['scripts']);
             foreach($scripts as $script) {
-                if($script != '') $page['scripts'][] = 'plugins/' . $info['plugin'] . '/scripts/' . $script;
+                if($script != '') $page['scripts'][] = $scriptPath . $script;
             }
         }
 

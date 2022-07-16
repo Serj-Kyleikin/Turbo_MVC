@@ -36,17 +36,29 @@ class Controller {
 
         // Получение данных модели
 
-        $method = 'get' . ucfirst($info['path']);
+        $info['method'] = 'get' . ucfirst($info['path']);
 
-        if(method_exists($this->model, $method)) {
+        if(method_exists($this->model, $info['method'])) {
 
-            $data = (isset($info['plugin'])) ? $this->getData($info, $method) : $this->model->$method($info);
+            if(isset($info['plugin'])) {
+
+                if(D_MODE) {
+                    try {
+                        if(!method_exists($this, 'start')) throw new \Exception($this->errors[2] . $info['plugin']);
+                    } catch(\Exception $e) {
+                        logError($e, 0);
+                    }
+                }
+
+                $data = $this->start($info);                    // Запуск контроллера плагина
+
+            } else $data = $this->model->getData($info);
 
             // Запуск рендеринга
 
             $view = new View;
             $view->rendering($info, $data);                     // Запуск сборки страницы
-            
+
             $this->errors = $this->resourse_dirs = $this->model = null;
 
         } else redirect(true);                                  // Страницы не существует
@@ -83,20 +95,5 @@ class Controller {
 
             redirect(true);                                 // Страницы не существует
         }
-    }
-
-    // Запуск контроллера плагина и получение данных модели
-
-    public function getData($info, $method) {
-
-        if(D_MODE) {
-            try {
-                if(!method_exists($this, 'start')) throw new \Exception($this->errors[2] . $info['plugin']);
-            } catch(\Exception $e) {
-                logError($e, 0);
-            }
-        }
-
-        return $this->start($info, $method);
     }
 }

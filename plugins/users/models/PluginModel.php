@@ -11,15 +11,6 @@ class PluginModel extends Model {
 
     public function getAuthorization($info) {
 
-        $data = $this->cache->read('plugin_authorization.tmp');
-
-        if(empty($data)) {
-
-            $data['settings'] = $this->getInfo($info);
-
-            $this->cache->write('plugin_authorization.tmp', $data);
-        }
-
-        return $data;
+        return '';
     }
 }
