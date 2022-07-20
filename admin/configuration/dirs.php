@@ -2,13 +2,14 @@
 
 return [
     'plugins' => [
-        '0777' => [
+        '0740' => [
             'cache',
+            'logs',
             'logs/plugins/users'
         ]
     ],
     'core' =>  [
-        '0777' => [
+        '0740' => [
             'configurations'
         ]
     ]

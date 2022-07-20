@@ -23,7 +23,8 @@ if(isset($_POST['ajaxSettings'])) {
 
     $errors = [
         '0' => 'отсутствует файл плагина AJAX-модели ',
-        '1' => 'отсутствует класс AjaxModel в '
+        '1' => 'отсутствует класс AjaxModel в ',
+        '2' => ' - ajax-метод отсутствует в модели: ',
     ];
 
     // Загрузка модели
@@ -49,7 +50,14 @@ if(isset($_POST['ajaxSettings'])) {
         else require_once $file;
 
         if(!class_exists($path)) throw new \Exception($errors[1] . $file);
-        else new $path($settings[2]);
+        else {
+
+            $model = new $path('ajax');
+            $method = $settings[2];
+
+            if(!method_exists($model, $method)) throw new \Exception($method . $errors[2] . $path);
+            else $model->$method();
+        }
 
     } catch(\Exception $e) {
         $log->logErrors($e, 0);

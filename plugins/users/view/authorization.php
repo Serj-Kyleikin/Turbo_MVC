@@ -7,7 +7,7 @@
             <input type="text" name="login" required>
         </div>
         <div id="password">
-            <label>Пароль:</label>
+            <label class="label">Пароль:</label>
             <input type="password" name="password" required>
         </div>
         <button name="submit" type="submit">Вход</button>

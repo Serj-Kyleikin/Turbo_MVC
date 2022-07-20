@@ -9,6 +9,7 @@ use PDO;
 class Model {
 
 	protected $connection;      // Дескриптор подключения
+
     public $cache;              // Объект кэширования
     public $log;                // Объект 
 
@@ -18,7 +19,10 @@ class Model {
 
 	public function __construct($method = []) {
 
-        $connection = $this->getConfiguration();                   // Получение данных подключения к БД
+        if($method == 'ajax') $this->loadLibraries();               // Загрузка библиотек
+        else $this->getLibraries();                                 // Подключение библиотек
+
+        $connection = $this->getConfiguration();                    // Получение данных подключения к БД
 
         $options = [
            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -32,15 +36,6 @@ class Model {
 		} catch (\PDOException $e) {
             logError($e, 1);
         }
-
-        // Запуск асинхронных методов из JS
-
-        if($method != []) {
-
-            $this->loadLibraries();                     // Подключение библиотек
-			$this->$method();
-
-		} else $this->getLibraries();                   // Загрузка библиотек
 	}
 
     // Получение данных подключения к БД
@@ -51,7 +46,7 @@ class Model {
 
         if(D_MODE) {
             try {
-                if(!file_exists($file)) throw new \Exception($this->$errors[0] . $file);
+                if(!file_exists($file)) throw new \Exception($this->errors[0] . $file);
             } catch(\Exception $e) {
                 logError($e, 0);
             }
@@ -64,18 +59,19 @@ class Model {
     // Подключение библиотек
 
     public function getLibraries() {
-        $this->cache = new Cache;                       // Кэширование
+        $this->cache = new Cache;                                       // Кэширование
     }
 
     // Загрузка библиотек для AJAX модели
 
     public function loadLibraries() {
 
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/libraries/Log.php';
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/libraries/Cache.php';
+        $libraries['Log'] = $_SERVER['DOCUMENT_ROOT'] . '/libraries/Log.php';
+        $libraries['Cache'] = $_SERVER['DOCUMENT_ROOT'] . '/libraries/Cache.php';
 
-        $this->log = new Log;                           // Логирование
+        foreach($libraries as $library) include_once $library;
 
+        $this->log = new Log;        // Логирование
         $this->getLibraries();
     }
 

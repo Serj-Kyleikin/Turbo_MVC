@@ -36,6 +36,21 @@ return [
             'options' => [
 
             ]
+        ],
+
+        // Конструктор
+
+        'builder' => [
+            'status' => 1,
+            'routes' => [
+                'level' => '0',
+                'entities' => [
+                    'builder'
+                ]
+            ],
+            'options' => [
+
+            ]
         ]
     ]
 ];

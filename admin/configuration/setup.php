@@ -40,7 +40,8 @@ if(count($_POST) == 4) {
                         'password' => '{$_POST['password']}',
                         'user' => '{$_POST['login']}'
                     ];";
-                }
+
+                } elseif($file == '.htaccess') $data = require_once $path . 'admin/configuration/apache.php';
 
                 $file = $path . $file;
                 if(!is_file($file)) file_put_contents($file, $data);

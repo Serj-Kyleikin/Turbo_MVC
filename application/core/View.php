@@ -37,7 +37,7 @@ class View {
         if($data['settings']['scripts'] != '') {
             $scripts = explode(',', $data['settings']['scripts']);
             foreach($scripts as $script) {
-                if($script != '') $page['scripts'][] = $scriptPath . $script;
+                if($script != '') $page['scripts'][] = $scriptPath  . $script;
             }
         }
 

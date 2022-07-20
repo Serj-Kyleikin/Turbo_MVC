@@ -48,9 +48,7 @@ async function getData(method) {
 function showError(data) {
 
     let errors = {
-        wrong_a_login: 'Неверный логин!',
-        wrong_r_login: 'Логин занят!',
-        wrong_r_mail: 'Почта уже используется!'
+        wrong_a_login: 'Неверный логин!'
     }
 
     let error = document.querySelector('.wrong');
