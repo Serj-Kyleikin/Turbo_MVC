@@ -11,7 +11,7 @@
 
     <?php
 
-        // Загрузка скриптов JS
+        // Загрузка стилей CSS
  
         foreach($page['styles'] as $style) {
 
