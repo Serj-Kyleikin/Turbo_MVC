@@ -15,7 +15,7 @@ class View {
         // Подготовка компонентов страницы и их стилей для загрузки в каркасе
 
         $page['partials']['header'] = 'application/view/partials/header.php';
-        $page['styles']['header'] = 'public/css/partials/header.css';
+        $page['styles']['header'] = 'public/css/partials/header.min.css';
 
         // Подготовка контента страницы и его стиля для загрузки в каркасе
 
@@ -30,7 +30,7 @@ class View {
         }
 
         $page['partials']['content'] = $contentPath . $info['path'] . '.php';
-        $page['styles']['content'] = $stylePath . $info['path'] . '.css';
+        $page['styles']['content'] = $stylePath . $info['path'] . '.min.css';
 
         // Подготовка скриптов JS для загрузки в каркасе
 
