@@ -15,7 +15,7 @@
  
         foreach($page['styles'] as $style) {
 
-            if(C_MODE) {
+            if(D_MODE) {
                 try {
                     if(!file_exists($style)) throw new \Exception('файл стиля: ' . $style);
                 } catch(Exception $e) {
@@ -34,7 +34,7 @@
 
             foreach($page['partials'] as $module) if($module != '') {
 
-                if(C_MODE) {
+                if(D_MODE) {
                     try {
                         if(!file_exists($module)) throw new \Exception('файл модуля: ' . $module);
                     } catch(Exception $e) {
@@ -49,7 +49,7 @@
  
             if(isset($page['scripts'])) foreach($page['scripts'] as $script) {
 
-                if(C_MODE) {
+                if(D_MODE) {
                     try {
                         if(!file_exists($script)) throw new \Exception('файл скрипта: ' . $script);
                     } catch(Exception $e) {
