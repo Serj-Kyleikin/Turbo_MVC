@@ -18,19 +18,19 @@ class PluginModel extends Model {
             $getPages = $this->connection->prepare('SELECT * FROM settings_pages');
             $getPages->execute();
 
-            $data['pages'] = $getPages->fetchAll(PDO::FETCH_ASSOC);
+            $result['static']['pages'] = $getPages->fetchAll(PDO::FETCH_ASSOC);
 
             // Вакансии
 
             $getVacancys = $this->connection->prepare('SELECT * FROM site_jobs');
             $getVacancys->execute();
 
-            $data['vacancys'] = $getVacancys->fetchAll(PDO::FETCH_ASSOC);
+            $result['static']['vacancys'] = $getVacancys->fetchAll(PDO::FETCH_ASSOC);
 
         } catch(\PDOException $e) {
             logError($e, 1);
         }
 
-        return $data;
+        return $result;
     }
 }

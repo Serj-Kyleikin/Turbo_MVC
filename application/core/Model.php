@@ -17,6 +17,8 @@ class Model {
         '0' => 'Отсутствует файл подключения к БД: '
     ];
 
+    public $pagination = 3;
+
 	public function __construct($method = []) {
 
         if($method == 'ajax') $this->loadLibraries();               // Загрузка библиотек
@@ -30,7 +32,7 @@ class Model {
            PDO::ATTR_EMULATE_PREPARES => false,
            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
         ];
-       
+
         try { 
 			$this->connection = new PDO('mysql:host='.$connection['host'].';dbname='.$connection['db_name'].'', $connection['user'], $connection['password'], $options);
 		} catch (\PDOException $e) {
@@ -80,18 +82,32 @@ class Model {
     public function getData($info) {
 
         $type = (isset($info['plugin'])) ? 'plugin_' : 'page_';
-        $cache = $type . $info['path'] . '.tmp';
+        $cache_name = $type . $info['path'] . '_' . $info['pagination'] . '.tmp';
 
-        $data = $this->cache->read($cache);
+        $data = $this->cache->read($cache_name);
+
+        $method = $info['method'];
+
+        // Подгрузка динамичного контента
+
+        if(isset($data['dynamic']['options'])) {
+            $method .= 'Dynamic';
+            $data['dynamic']['content'] = $this->$method($data['dynamic']['options']);
+        }
+
+        // Кэширование статичного контента
 
         if(empty($data)) {
 
-            $method = $info['method'];
+            $content = $this->$method($info);
 
-            $data['content'] = $this->$method($info);
-            $data['settings'] = $this->getInfo($info);
+            $data['static'] = $cache['static'] = $content['static'];
+            $data['settings'] = $cache['settings'] = $this->getInfo($info);
 
-            $this->cache->write($cache, $data);
+            if(isset($content['dynamic'])) $data['dynamic'] = $cache['dynamic'] = $content['dynamic'];
+            if(isset($content['pagination'])) $data['pagination'] = $cache['pagination']  = $content['pagination'];
+
+            $this->cache->write($cache_name, $cache);
         }
 
         return $data;
@@ -116,7 +132,7 @@ class Model {
         }
 
         $data['name'] = $info['path'];
-        $sql = "SELECT * FROM settings_$component $condition";
+        $sql = "SELECT title, description, h1, annotation, scripts FROM settings_$component $condition ORDER BY name LIMIT 1";
 
         try {
 
@@ -134,9 +150,7 @@ class Model {
 
     public function checkUser() {
 
-        $secret = substr(explode('_', $_COOKIE['user'])[0], 0, -2);
-        $key = (int)$secret / 3;
-        $prepare['user_id'] =  substr($key, 2, -2);
+        $prepare['user_id'] =  $this->getID();
         $prepare['secret'] = explode('_', $_COOKIE['user'])[1];
 
         try {
@@ -152,5 +166,28 @@ class Model {
 
         if(isset($row['secret'])) return 'checked';
         else setcookie('user', '', time()-86400, '/');
+    }
+
+    // Получение id
+
+    public function getID() {
+
+        $secret = substr(explode('_', $_COOKIE['user'])[0], 0, -2);
+        $key = (int)$secret / 3;
+
+        return substr($key, 2, -2);
+    }
+
+    // Параметры пагинации
+
+    public function setPagination($url, $pagination) {
+
+        $url[count($url) - 1] = '';
+        $url = implode('/', $url);
+
+        $result['previous'] = ($pagination == 1) ? false : $url . ($pagination - 1);
+        $result['next'] = $url . ($pagination + 1);
+
+        return $result;
     }
 }

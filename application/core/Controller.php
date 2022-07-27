@@ -54,6 +54,8 @@ class Controller {
 
             } else $data = $this->model->getData($info);
 
+            if(isset($data['static']['empty'])) redirect(true);   // При отсутствии данных для пагинации и иных параметров URL
+
             // Запуск рендеринга
 
             $view = new View;

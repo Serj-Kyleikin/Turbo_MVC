@@ -4,20 +4,17 @@ namespace application\core;
 
 class View {
 
-    public $errors = [
-        '0' => 'файл шаблона: '
-    ];
+    public $settings;
+    public $scripts = [];
+    public $styles = [];
+    public $header = 'public/css/partials/header.min.css';
+    public $partials = [];
 
     // Подготовка компонентов, стилей и скриптов страницы
 
     public function rendering($info, $data) {
 
-        // Подготовка компонентов страницы и их стилей для загрузки в каркасе
-
-        $page['partials']['header'] = 'application/view/partials/header.php';
-        $page['styles']['header'] = 'public/css/partials/header.min.css';
-
-        // Подготовка контента страницы и его стиля для загрузки в каркасе
+        // Подготовка контента страницы
 
         if(isset($info['plugin'])) {
             $contentPath = 'plugins/' . $info['plugin'] . '/view/';
@@ -29,32 +26,32 @@ class View {
             $scriptPath = 'public/js/';
         }
 
-        $page['partials']['content'] = $contentPath . $info['path'] . '.php';
-        $page['styles']['content'] = $stylePath . $info['path'] . '.min.css';
+        // Подготовка данных страницы
+
+        foreach($data['settings'] as $key => $name) if($key != 'scripts') $this->settings[$key] = $name;
 
         // Подготовка скриптов JS для загрузки в каркасе
 
         if($data['settings']['scripts'] != '') {
             $scripts = explode(',', $data['settings']['scripts']);
-            foreach($scripts as $script) {
-                if($script != '') $page['scripts'][] = $scriptPath  . $script;
-            }
+            foreach($scripts as $script) if($script != '') $this->scripts[] = $scriptPath  . $script;
         }
 
-        // Подготовка данных страницы
+        unset($data['settings']);
 
-        $page['settings']['title'] = $data['settings']['title'];
-        $page['settings']['description'] = $data['settings']['description'];
-        $page['settings']['h1'] = $data['settings']['h1'];
-        $page['settings']['annotation'] = $data['settings']['annotation'];
+        // Подготовка стилей для загрузки в каркасе
+
+        $this->styles[] = $stylePath . $info['path'] . '.css';
+
+        // Подготовка модулей страницы для загрузки в каркасе
+
+        $this->partials['header'] = 'application/view/partials/header.php';
+        $this->partials['content'] = $contentPath . $info['path'] . '.php';
 
         // Подготовка контента страницы
 
-        $page['content'] = $data['content'];
-
-        // Удаление переменных из памяти
-
-        $route = $plugin = $data = null;
+        $page[0] = $data;
+        $route = $plugin = $data = $info = null;
 
         $page[] = ob_get_clean();
 
@@ -62,16 +59,64 @@ class View {
 
         $file = 'application/view/gather.php';
 
-        if(D_MODE) {
-            try {
-                if(!file_exists($file)) throw new \Exception($this->errors[0] . $file);
-            } catch(\Exception $e) {
-                logError($e, 0);
-            }
-        }
-
+        if(D_MODE) $this->check('шаблона', $file);
         include_once $file;
 
-        $this->errors = null;
+        $this->errors = $this->settings = $this->partial = $this->scripts = $this->styles = null;
+    }
+
+    // Загрузка стилей CSS
+
+    public function loadCSS($type) {
+
+        if($type == 'header') {
+
+            if(C_MODE) $this->check('стиля', $this->header, 'script');
+            echo "<link rel='stylesheet preload' href='/" . $this->header . "' as='style'/>";
+            $this->header = null;
+
+        } elseif($type == 'styles') {
+
+            foreach($this->styles as $style) {
+                if(C_MODE) $this->check('стиля', $style, 'script');
+                echo "<link rel='stylesheet' href='/" . $style . "'/>";
+            }
+
+            $this->styles = null;
+        }
+    }
+
+    // Загрузка скриптов JS
+
+    public function loadJS() {
+
+        if(isset($this->scripts[0])) {
+
+            foreach($this->scripts as $key => $script) {
+
+                if(C_MODE) $this->check('скрипта', $script, 'insert');
+
+                echo "link = document.createElement('SCRIPT');
+                link.id = 'js_$key'
+                link.async = true
+                link.defer = true
+                link.src = '$script'
+                document.querySelector('.wrapper').insertAdjacentElement('afterend', link);" . PHP_EOL;
+            }
+
+            $this->scripts = null;
+        }
+    }
+
+    // Проверка файлов
+
+    public function check($type, $file, $log = []) {
+
+        try {
+            if(!file_exists($file)) throw new \Exception("файл $type: " . $file);
+        } catch(\Exception $e) {
+            if($log == []) logError($e, 0);
+            else logError($e, 'Component', $log);
+        }
     }
 }

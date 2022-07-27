@@ -18,14 +18,32 @@ class RouteController {
 
         // Определение маршрута
 
-        $url = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
-        $this->info['path'] = ($url[0] == '') ? 'main' : $url[0];
+        $this->info['url'] = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
 
-        if(P_MODE and $this->getSettings()) $this->checkPlugin($url);       // Поиск плагинов
+        // Определение пути, проверка пагинации и плагинов
 
-        new $this->controller($this->info);                                 // Запуск конструктора базового контроллера
+        if($this->createPath($this->info['url']) != 'main' and P_MODE and $this->getSettings()) $this->checkPlugin($this->info['url']);
+
+        new $this->controller($this->info);                   // Запуск конструктора базового контроллера
 
         $this->settings = $this->controller = $this->info = $this->errors = null;
+    }
+
+    // Определение пути и проверка пагинации
+
+    public function createPath($url) {
+
+        $last = $url[count($url) - 1];
+
+        if(preg_match('/^[\d]+$/', $last)) {
+
+            $this->info['pagination'] = $last;
+
+            if($url['0'] == $last) return $this->info['path'] = 'main';
+
+        } else $this->info['pagination'] = 1;
+
+        return $this->info['path'] = ($url['0'] == '') ? 'main' : $url['0'];
     }
 
     // Получение настроек плагинов

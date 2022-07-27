@@ -7,8 +7,8 @@ $cabinet = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYEAQAAAAa7ikwAA
 ?>
 
 <header>
-<h1><?php echo $page['settings']['h1']; ?></h1>
-    <p><?php echo $page['settings']['annotation']; ?></p>
+<h1><?php echo $this->settings['h1']; ?></h1>
+    <p><?php echo $this->settings['annotation']; ?></p>
     <ul>
         <li><a href="/">
             <img width="24" height="24" alt="" src="<?=$main;?>"> Главная

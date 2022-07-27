@@ -6,62 +6,41 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.6, user-scalable=yes">
-    <title><? echo $page['settings']['title']; ?></title>
-    <meta name="description" content="<? echo $page['settings']['description']; ?>">
-
-    <?php
-
-        // Загрузка стилей CSS
- 
-        foreach($page['styles'] as $style) {
-
-            if(D_MODE) {
-                try {
-                    if(!file_exists($style)) throw new \Exception('файл стиля: ' . $style);
-                } catch(Exception $e) {
-                    logError($e, 'Component', 'exit');
-                }
-            }
-
-            echo "<link rel='stylesheet' href='" . $style . "'>";
-        }
-    ?> 
+    <title><? echo $this->settings['title']; ?></title>
+    <meta name="description" content="<? echo $this->settings['description']; ?>">
+    <?php $this->loadCSS('header'); // Стиль первого экрана ?>
 </head>
 <body>
+
+    <?php $this->loadCSS('styles'); // Некритичные стили ?> 
+
     <div class="wrapper">
 
         <?php
 
-            foreach($page['partials'] as $module) if($module != '') {
+            // Загрузка модулей
 
-                if(D_MODE) {
-                    try {
-                        if(!file_exists($module)) throw new \Exception('файл модуля: ' . $module);
-                    } catch(Exception $e) {
-                        logError($e, 'Component', 'exit');
-                    } 
-                }
-
+            foreach($this->partials as $module) {
+                if(C_MODE) $this->check('модуля', $module, 'script');
                 include_once $module;
             }
-
-            // Загрузка скриптов JS
- 
-            if(isset($page['scripts'])) foreach($page['scripts'] as $script) {
-
-                if(D_MODE) {
-                    try {
-                        if(!file_exists($script)) throw new \Exception('файл скрипта: ' . $script);
-                    } catch(Exception $e) {
-                        logError($e, 'Component', 'exit');
-                    }
-                }
-
-                echo "<script async defer src='$script'></script>";
-            }
-        ?> 
+        ?>
 
     </div>
+    <script>
 
+        // Отложенная загрузка скриптов JS
+
+        if(!document.getElementById('js_0')) {
+
+            setTimeout(addJS, 100);
+            let link;
+
+            function addJS() {
+                <?php $this->loadJS(); ?>
+            }
+        }
+
+    </script>
 </body>
 </html>

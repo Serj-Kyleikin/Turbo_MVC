@@ -18,27 +18,27 @@ Options All -Indexes
 
 ### Сжатие
 
-<ifModule mod_deflate.c>
-  <IfModule mod_filter.c>
-      AddOutputFilterByType DEFLATE text/plain text/html
-      AddOutputFilterByType DEFLATE text/css
-      AddOutputFilterByType DEFLATE text/javascript application/javascript application/x-javascript
-      AddOutputFilterByType DEFLATE text/xml application/xml application/xhtml+xml application/rss+xml
-      AddOutputFilterByType DEFLATE application/json
-      AddOutputFilterByType DEFLATE application/vnd.ms-fontobject application/x-font-ttf font/opentype image/svg+xml image/x-icon
-  </ifModule>
-</ifModule>
+#<ifModule mod_deflate.c>
+#  <IfModule mod_filter.c>
+#      AddOutputFilterByType DEFLATE text/plain text/html
+#      AddOutputFilterByType DEFLATE text/css
+#      AddOutputFilterByType DEFLATE text/javascript application/javascript application/x-javascript
+#      AddOutputFilterByType DEFLATE text/xml application/xml application/xhtml+xml application/rss+xml
+#      AddOutputFilterByType DEFLATE application/json
+#      AddOutputFilterByType DEFLATE application/vnd.ms-fontobject application/x-font-ttf font/opentype image/svg+xml image/x-icon
+#  </ifModule>
+#</ifModule>
 
 ### Кеширование
 
-<ifModule mod_headers.c>
-    Header unset ETag
-    <FilesMatch '\.(js|css)$'>
-	    Header set Cache-Control 'max-age=2592000'
-    </FilesMatch>
-    <FilesMatch '\.(gif|jpg|jpeg|png)$'>
-	    Header set Cache-Control 'max-age=2592000'
-    </FilesMatch>
-</IfModule>
-FileETag None
+#<ifModule mod_headers.c>
+#    Header unset ETag
+#    <FilesMatch '\.(js|css)$'>
+#	    Header set Cache-Control 'max-age=2592000'
+#    </FilesMatch>
+#    <FilesMatch '\.(gif|jpg|jpeg|png)$'>
+#	    Header set Cache-Control 'max-age=2592000'
+#    </FilesMatch>
+#</IfModule>
+#FileETag None
 "];

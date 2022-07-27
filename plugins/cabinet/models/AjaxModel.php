@@ -27,8 +27,8 @@ class AjaxModel extends Model {
             $this->log->logErrors($e, 1);
         }
 
-        $this->cache->delete('page_main.tmp');
-        $this->cache->delete('plugin_cabinet.tmp');
+        $this->cache->delete('page_main_1.tmp');
+        $this->cache->delete('plugin_cabinet_1.tmp');
     }
 
     // Загрузка кнопки из БД
@@ -76,8 +76,8 @@ class AjaxModel extends Model {
             $this->log->logErrors($e, 1);
         }
 
-        $this->cache->delete('page_main.tmp');
-        $this->cache->delete('plugin_cabinet.tmp');
+        $this->cache->delete('page_main_1.tmp');
+        $this->cache->delete('plugin_cabinet_1.tmp');
     }
 
     // Удаление вакансий
@@ -95,7 +95,7 @@ class AjaxModel extends Model {
             $this->log->logErrors($e, 1);
         }
 
-        $this->cache->delete('page_main.tmp');
-        $this->cache->delete('plugin_cabinet.tmp');
+        $this->cache->delete('page_main_1.tmp');
+        $this->cache->delete('plugin_cabinet_1.tmp');
     }
 }

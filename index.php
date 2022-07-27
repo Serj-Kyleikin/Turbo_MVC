@@ -6,12 +6,12 @@ session_start();
 
 // Настройки администратора (0 - публичное размещение, 1 - отладка)
 
-ini_set('display_errors', 0);       // Отображение ошибок
+ini_set('display_errors', 1);       // Отображение ошибок
 error_reporting(E_ALL);
 
-define('A_MODE', 0);                // Режим администратора
-define('C_MODE', 0);                // Режим проверки
-define('D_MODE', 0);                // Режим диагностики
+define('A_MODE', 1);                // Режим администратора
+define('C_MODE', 1);                // Режим проверки
+define('D_MODE', 1);                // Режим диагностики
 define('P_MODE', 1);                // Использование плагинов
 
 // Подключение технических функций администратора на время работ
@@ -62,10 +62,13 @@ function logError($catch, $type, $show = true) {
 // Рекдирект
 
 function redirect($url) {
+
     if($url === true) header('location: /404.php');
-    elseif($url == 'exit') echo "<script>window.location.href = '/404.php';</script>";
+    elseif($url == 'insert') echo "window.location.href = '/404.php';";
+    elseif($url == 'script') echo "<script>window.location.href = '/404.php';</script>";
     else header('location: /' . $url);
-    exit;
+
+    if($url != 'insert') exit;
 }
 
 // Запуск маршрутизатора
