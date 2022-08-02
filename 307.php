@@ -24,12 +24,12 @@
             <img width="24" height="24" alt="" src="<?=$main;?>"> Главная
         </a></li>
         <? if(isset($_COOKIE['user'])): ?>
-            <li><a href="cabinet">
+            <li><a href="/cabinet">
                 <img width="24" height="24" alt="" src="<?=$cabinet;?>">
                 <span>Кабинет</span>
             </a></li>
         <? else: ?>
-            <li><a href="authorization">
+            <li><a href="/authorization">
                 <img width="24" height="24" alt="" src="<?=$cabinet;?>">
                 <span>Авторизация</span>
             </a></li>
