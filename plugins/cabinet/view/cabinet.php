@@ -3,13 +3,21 @@
     $static = $page[0]['static'];
     $countPages = count($static['pages']);
     $countVacancys = count($static['vacancys']);
+
+    $icons = $this->icons['page'];
 ?>
 
 <div class="cabinet">
     <div class="information_menu">
         <h3>Меню администратора</h3>
-        <p data-tab="0" class="information_tab">Страницы</p>
-        <p data-tab="1" class="information_tab">Вакансии</p>
+        <p data-tab="0" class="information_tab">
+            <img loading="lazy" width="16" height="16" src="<?=$icons['pages']; ?>">
+            <span>Страницы</span>
+        </p>
+        <p data-tab="1" class="information_tab">
+        <img loading="lazy" width="16" height="16" src="<?=$icons['jobs']; ?>">
+            <span>Вакансии</span>
+        </p>
     </div>
     <div class="information_show">
         <div class="information_content active">

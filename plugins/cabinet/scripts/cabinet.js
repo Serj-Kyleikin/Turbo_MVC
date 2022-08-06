@@ -1,34 +1,28 @@
 //*********** Вкладки ***********//
 
-let tabs = document.querySelectorAll('.information_tab');
-
-tabs.forEach((item) => {
-   item.onclick = function() {
-       document.querySelector('.active').classList.remove('active');
-       document.querySelector('.information_show').children[item.getAttribute('data-tab')].classList.add('active');
-   } 
-});
+document.querySelectorAll('.information_tab').forEach((item) => {
+    item.onclick = function() {
+        document.querySelector('.information_content.active').classList.remove('active');
+        document.querySelector('.information_show').children[item.dataset.tab].classList.add('active');
+    } 
+ }); 
 
 //*********** Сохранить настройки ***********//
 
 async function updateInfo(name) {
 
     let formData = new FormData();
-
     let form = document.forms[name];
-    let elements = form.getElementsByTagName('input');
 
     for(let i = 0; i < form.length; i++) {
-        if(form.elements[i].getAttribute('name') != 'submit') {
-            formData.append(form.elements[i].getAttribute('name'), form.elements[i].value);
-        }
+        if(form.elements[i].name != 'submit') formData.append(form.elements[i].name, form.elements[i].value);
     }
 
     formData.append('ajaxSettings', 'plugins:cabinet:save'+name);
 
     // Запрос на сервер
 
-    let data = await fetch('/Ajax.php', {
+    await fetch('/Ajax.php', {
         method: 'POST',
         body: formData
     });

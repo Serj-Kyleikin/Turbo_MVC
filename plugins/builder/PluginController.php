@@ -1,6 +1,6 @@
 <?php
 
-namespace plugins\users;
+namespace plugins\builder;
 
 use application\core\Controller;
 use application\core\Model;
@@ -11,10 +11,8 @@ class PluginController extends Controller {
 
         // Маршрутизация
 
-        if(isset($_COOKIE['user']) and $info['path'] == 'authorization') {
-            if($this->model->checkUser() == 'checked') redirect(' ');
-        }
-
+        if(!isset($_COOKIE['user'])) redirect('authorization');
+        
         // Получение данных модели
 
         return $this->model->getData($info);

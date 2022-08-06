@@ -11,6 +11,9 @@ class PluginModel extends Model {
 
     public function getAuthorization($info) {
 
-        return '';
+        if($info['pagination']["this"] == '1') $result['content'] = 0;
+        else $result['empty'] = true;
+
+        return $result;
     }
 }

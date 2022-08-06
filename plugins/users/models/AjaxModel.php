@@ -106,7 +106,6 @@ class AjaxModel extends Model {
         return "password_{$response}";
     }
 
-
     //**************************// Вспомогательные методы //**************************//
 
     // Запись данных авторизованного пользователя
@@ -115,6 +114,9 @@ class AjaxModel extends Model {
 
         if($_POST['info'] == '"TypeError"') {
             $log = 'Сайт https://json.geoiplookup.io/ работает с ошибкой, поэтому данные авторизующегося пользователя не получить.';
+            $code = 1;
+        } elseif($_POST['info'] == '"AbortError"') {
+            $log = 'Превышен таймаут соединения с сайтом https://json.geoiplookup.io/, поэтому данные авторизующегося пользователя не получить.';
             $code = 1;
         } else {
             $log = $_POST['info'];

@@ -28,15 +28,8 @@
     transition: color 1s;
     border-radius: 5px;
 }
-.information_menu > p::before {
-    content: "";
-    min-width: 20px;
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-    display: inline-block;
-    background: url('/public/screenshots/icons/message.png') center center no-repeat;
-    background-size: cover;
+.information_menu > p > span {
+    margin-left: 10px;
 }
 
 /* Контейнеры вкладок */
@@ -221,26 +214,6 @@
         margin-left: 20px;
     }
 }
-@media only screen and (max-width: 768px) {
-
-    .information_menu {
-        width: 140px;
-    }
-    .information_menu > p {
-        font-size: 14px;
-    }
-    .information_menu > ul > li {
-        margin-bottom: 10px;
-    }
-    .information_menu > ul > li > a {
-        font-size: 14px;
-    }
-    .information_show {
-        width: calc(90% - 150px);
-        margin-left: 10px;
-        font-size: 14px;
-    }
-}
 @media only screen and (max-width: 600px) {
 
     .cabinet {
@@ -251,22 +224,23 @@
         padding: 15px;
     }
     .information_menu {
-        width: 100%;
-        margin-top: 0;
-    }
-    .information_menu > p {
-        font-size: 18px;
-    }
-    .information_menu > ul {
-        display: flex;
+        flex-flow: row wrap;
+        justify-content: center;
         width: 100%;
         overflow-x: scroll;
         white-space: nowrap;
-        padding-bottom: 15px;
+        margin-top: 0;
     }
-    .information_menu > ul > li {
+    .information_menu > h3 {
+        width: 100%;
+        text-align: center;
+    }
+    .information_menu > p {
+        width: auto;
+        font-size: 18px;
         padding: 5px 20px;
         margin-left: 10px;
+        margin-bottom: 0;
     }
     .information_show {
         width: 100%;
@@ -327,7 +301,13 @@
 }
 @media only screen and (max-width: 400px) {
 
-    .information_menu > ul > li {
-        padding: 7px 25px;
+    .information_menu > p > span {
+        display: none;
+    }
+    .information_show {
+        width: 100%;
+        margin-top: 0;
+        margin-left: 0;
+        padding: 0;
     }
 }

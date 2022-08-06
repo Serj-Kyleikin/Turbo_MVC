@@ -8,10 +8,8 @@
 ?>
 
 <div>
-    <? if($count): for($i = 0; $i < $count; $i++): 
+    <? if($count): for($i = 0; $i < $count; $i++): $post = $static[$i]; ?>
 
-        $post = $static[$i];
-    ?>
         <div class="job">
             <p>Требуется: <? echo $post['name']; ?></p>
             <p class="description"><? echo $post['text']; ?></p>
@@ -24,12 +22,11 @@
             </div>
             <hr>
         </div>
-    <? endfor; else: ?>
-        <p>Новых вакансий нет.</p>
-    <? endif; ?>
+
+    <? endfor; else: echo "<p>Новых вакансий нет.</p>"; endif; ?>
 </div>
 
 <div class="pagination">
-    <?php if(isset($previous) and $previous): echo "<a href='/" . $previous . "'>Назад</a>"; endif; ?>
-    <?php if(isset($next) and $next): echo "<a href='/" . $next . "'>Вперёд</a>"; endif; ?>
+    <?php if(isset($previous) and $previous): echo "<a href='" . $previous . "'>Назад</a>"; endif; ?>
+    <?php if(isset($next) and $next): echo "<a href='" . $next . "'>Вперёд</a>"; endif; ?>
 </div>
