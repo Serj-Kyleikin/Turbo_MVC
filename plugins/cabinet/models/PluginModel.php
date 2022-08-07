@@ -33,7 +33,7 @@ class PluginModel extends Model {
                 logError($e, 1);
             }
 
-        } $result['empty'] = true;
+        } else $result['empty'] = true;
 
         return $result;
     }
