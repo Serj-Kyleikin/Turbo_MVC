@@ -2,6 +2,8 @@
  Приветствую!!
 
  1) Создать пользователя mysql (Минимум 4 символа для логина и пароля)
+ 
+    docker exec -it <mycontainer> bash
 
     CREATE USER admin@localhost IDENTIFIED BY 'password';
     GRANT CREATE, DROP, SELECT, UPDATE, INSERT  ON *.* TO admin@localhost;
